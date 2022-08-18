@@ -8,6 +8,8 @@ import textBubble from '../assets/text-bubble-round.svg';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+import '../styles/App.css';
+
 class NavBar extends Component {
     constructor() {
       super();
@@ -15,24 +17,25 @@ class NavBar extends Component {
   
     render() {
         return (
-        <header style={{display: "flex"}}>
-            <img src={bird} style={{maxWidth: "50px"}}></img>
+        <header className="navBar">
+            <img src={bird} style={{maxWidth: "72px", fill: "white"}}></img>
             <Typography variant="h2">BackyardQuails</Typography>
-            <div style={{ flex: 1 }}></div>
-            <Button>
-                <img src={textBubble} style={{maxWidth: "24px"}}></img>
+            
+            <Button className="baseButton">
+                <img src={textBubble} className="icon"></img>
                 Forums
             </Button>
-            <Button>
-                <img src={paper} style={{maxWidth: "24px"}}></img>
+            <Button className="baseButton">
+                <img src={paper} className="icon"></img>
                 Articles
             </Button>
-            <Button>
-                <img src={profile} style={{maxWidth: "24px"}}></img>
+            <div style={{ flex: 1 }}></div>
+            <Button className="baseButton">
+                <img src={profile} className="icon"></img>
                 Log In
             </Button>
-            <Button>
-                <img src={search} style={{maxWidth: "24px"}}></img>
+            <Button className="baseButton">
+                <img src={search} className="icon"></img>
                 Search
             </Button>
         </header>

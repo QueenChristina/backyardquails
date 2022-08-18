@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
+import './styles/App.css';
 
 class App extends Component {
   constructor() {
@@ -36,6 +37,7 @@ class App extends Component {
         </div>
         <footer>
           <Typography variant="body1" style={{display: "inline"}}>BackyardQuails (c) 2022</Typography>
+          <div style={{ flex: 1 }}></div>
           <Button><a href="google.com"> Contact Us </a></Button>
           <Button><a href="google.com"> Terms and Rules </a></Button>
           <Button><a href="google.com"> Privacy Policy </a></Button>

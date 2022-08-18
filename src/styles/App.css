@@ -1,0 +1,49 @@
+body {    
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden;
+}
+
+.page-container {
+    position: relative;
+    min-height: 100vh;
+}
+
+.navBar {
+    display: flex;
+    background-color: #5B504D;
+    color: white;
+    padding: 10px;
+}
+
+.icon {
+    width: 24px;
+    fill:#5B504D;
+    margin: 5px;
+}
+
+footer {
+    display: flex;
+    background-color: #5B504D;
+    color: white;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+}
+
+.baseButton {
+    background-color: #B28255;
+    color: white;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.baseButton :hover {
+    background-color: #816962;
+}
+
+MuiTypography-h2 {
+    font-size: 2.5rem;
+}
