@@ -1,12 +1,17 @@
 body {    
     margin: 0 !important;
     padding: 0 !important;
-    overflow-x: hidden;
 }
 
-.page-container {
+.pageContainer {
+    display: flex;
+    flex-direction: column;
     position: relative;
     min-height: 100vh;
+}
+
+.contentContainer {
+    margin: 15px;
 }
 
 .navBar {
@@ -17,33 +22,66 @@ body {
 }
 
 .icon {
-    width: 24px;
+    height: 24px;
     fill:#5B504D;
     margin: 5px;
+}
+
+.colorBox {
+    background-color: #AFA9A9;
+    border-radius: 0 0 10px 10px;
+    padding: 12px;
+}
+
+.outlinedWhiteBox {
+    background-color: white;
+    border-radius: 0 0 10px 10px;
+    border: 1px solid #5B504D;
+    padding: 12px;
+}
+
+.heading {
+    background-color: #816962;
+    color: white;
+    /* Marked important to override MuiTypography-h3 */
+    font-size: 1.5rem !important;
+    padding: 10px 15px;
+}
+
+.imgLabel {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color:rgba(0,0,0,0.75);
+    color: white;
+    padding: 5px 10px;
+    box-sizing: border-box;
 }
 
 footer {
     display: flex;
     background-color: #5B504D;
     color: white;
-    position: absolute;
     left: 0;
     bottom: 0;
     width: 100%;
     padding: 10px;
+    box-sizing: border-box;
 }
 
 .baseButton {
-    background-color: #B28255;
-    color: white;
-    border-radius: 10px;
-    padding: 5px;
+    /* Marked as important to override MuiButton-root */
+    background-color: #B28255 !important;
+    color: white !important;
+    border-radius: 10px !important;
+    padding: 0px 10px !important;
+    margin: 0px 10px !important;
 }
 
-.baseButton :hover {
-    background-color: #816962;
+.baseButton:hover {
+    background-color: #816962 !important;
 }
 
-MuiTypography-h2 {
+.MuiTypography-h2 {
     font-size: 2.5rem;
 }

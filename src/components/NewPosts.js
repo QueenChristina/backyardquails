@@ -5,6 +5,8 @@ import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
+import '../styles/App.css';
+
 class PostThumbnail extends Component {
     constructor() {
       super();
@@ -15,7 +17,7 @@ class PostThumbnail extends Component {
             <a href="google.com">
                 <div>
                     <div style={{display:"inline-block"}}>
-                        <img src={profile} style={{width: "72px"}}></img>
+                        <img src={profile} style={{width: "52px"}}></img>
                     </div>
                     <div style={{display:"inline-block"}}>
                         <Typography variant="body1"> {this.props.title} </Typography>
@@ -35,13 +37,15 @@ class NewPosts extends Component {
   
     render() {
         return (
-            <Box sx={{ p: 2, border: '1px solid grey' }}>
-            <Typography variant="h3">New Posts</Typography>
-                <PostThumbnail title="Post Title" category="Category" author="Author" time="5 minutes"/>
-                <PostThumbnail title="Post Title" category="Category" author="Author" time="15 minutes"/>
-                <PostThumbnail title="Post Title" category="Category" author="Author" time="5 minutes"/>
-                <PostThumbnail title="Post Title" category="Category" author="Author" time="5 minutes"/>
-            </Box>
+            <div>
+            <Typography variant="h3" className="heading">New Posts</Typography>
+                <Box className="colorBox">
+                    <PostThumbnail title="Post Title" category="Category" author="Author" time="5 minutes"/>
+                    <PostThumbnail title="Post Title" category="Category" author="Author" time="15 minutes"/>
+                    <PostThumbnail title="Post Title" category="Category" author="Author" time="5 minutes"/>
+                    <PostThumbnail title="Post Title" category="Category" author="Author" time="5 minutes"/>
+                </Box>
+            </div>
         );
     }
 }

@@ -18,8 +18,8 @@ class NavBar extends Component {
     render() {
         return (
         <header className="navBar">
-            <img src={bird} style={{maxWidth: "72px", fill: "white"}}></img>
-            <Typography variant="h2">BackyardQuails</Typography>
+            <img src={bird} style={{maxWidth: "52px", fill: "white"}}></img>
+            <Typography variant="h2" style={{fontSize: "2rem", padding: "0px 10px"}}>BackyardQuails</Typography>
             
             <Button className="baseButton">
                 <img src={textBubble} className="icon"></img>

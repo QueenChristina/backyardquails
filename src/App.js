@@ -23,9 +23,9 @@ class App extends Component {
     const { task, tasks } = this.state;
 
     return (
-      <div>
+      <div className="pageContainer">
         <NavBar/>
-        <div id="content">
+        <div className="contentContainer">
           <Grid container spacing={2}>
             <Grid item xs={12} md={8}>
               <FeaturedContent/>
@@ -35,6 +35,7 @@ class App extends Component {
             </Grid>
         </Grid>
         </div>
+        <div style={{flexGrow: 1}}></div>
         <footer>
           <Typography variant="body1" style={{display: "inline"}}>BackyardQuails (c) 2022</Typography>
           <div style={{ flex: 1 }}></div>
