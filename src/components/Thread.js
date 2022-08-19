@@ -136,7 +136,7 @@ class Thread extends Component {
                         <a href="/forums" style={{paddingRight: "15px"}}>
                             <BackArrow style={{maxWidth:"12px", fill: "white"}} />
                         </a>
-                        <a href={"/forums/" + convertToLink(this.props.title)} style={{paddingRight: "15px"}}>
+                        <a href={"/forums/" + convertToLink(this.state.category)} style={{paddingRight: "15px"}}>
                             {this.state.category}
                         </a>
                         / {this.state.title}
