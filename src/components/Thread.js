@@ -85,7 +85,7 @@ class PostForm extends Component {
 
 function withParams(Component) {
     return props => <Component {...props} params={useParams()} />;
-}
+  }
 
 class Thread extends Component {
     constructor(props) {
@@ -94,31 +94,37 @@ class Thread extends Component {
       this.state = {
         title: "", 
         posts: [],
-        category: ""
+        category: "",
+        id : "" // document id cooresponding to thread
     };
 
-        this.id = "";
+        this.uid = ""; // url id, also the thread #
     }
   
     componentDidMount() {
-        this.id = this.props.params.id;
-        console.log("/////////////////////path id//////")
-        console.log(this.id);
-        console.log(this.props.id);
+        // uid is the thread index by creation order
+        this.uid = this.props.params["*"].split("/")[1];
 
-        // Update posts realtime
-        db.collection('threads/' + this.id + '/Posts').orderBy("date", "asc").onSnapshot(snapshot => 
-            this.setState({
-                posts: snapshot.docs.map(x => x.data())
-            })
-        );
-        console.log(this.state.posts);
+        db.collection("uidToId").doc("threads").get().then ( (snapshot) => {
+            this.setState(
+                // thread # uid to document id is stored in uidToId/threads
+                {id: snapshot.data()[this.uid]}
+            );
 
-        db.collection('threads').doc(this.props.id).get().then ( (snapshot) =>
-            this.setState({
-                title: snapshot.data().title,
-                category: snapshot.data().category
-            })
+            // Update posts realtime
+            db.collection('threads/' + this.state.id + '/Posts').orderBy("date", "asc").onSnapshot(snapshot => 
+                this.setState({
+                    posts: snapshot.docs.map(x => x.data())
+                })
+            );
+    
+            db.collection('threads').doc(this.state.id).get().then ( (snapshot) =>
+                this.setState({
+                    title: snapshot.data().title,
+                    category: snapshot.data().category
+                })
+            );
+        }
         );
     }
 
@@ -141,11 +147,11 @@ class Thread extends Component {
                     {this.state.posts.map((post, index) =>
                         <Post key={index} username={post.username} text={post.text} date={post.date} likes={post.likes}/>                      
                     )}
-                    <PostForm threadId={this.props.id}/>
+                    <PostForm threadId={this.state.id}/>
                 </Box>
             </div>
         );
     }
 }
 
-export default withParams(Thread);
+export default  withParams(Thread);

@@ -1,13 +1,12 @@
 import React, { Component, useEffect } from "react";
 import {ReactComponent as BackArrow} from '../assets/back-arrow.svg';
 import profile from '../assets/profile3.svg';
+import {convertToLink} from '../utils.js';
 
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { TextField } from "@material-ui/core";
-
-import {convertToLink} from '../utils.js';
 
 import '../styles/App.css';
 import db from '../firebase';
@@ -24,7 +23,7 @@ class ThreadThumbnail extends Component {
             <div style={{display: "flex"}} className="post">
                 <img src={profile} style={{width: "49px", margin: "auto"}}></img>
                 <div style={{width:"calc(100% - 100px)", display: "flex", flexDirection: "column"}}>
-                    <a href={"/threads/" + this.props.id}>
+                    <a href={"/threads/" + convertToLink(this.props.title) + "/" + this.props.uid}>
                         <Typography variant="h6">{this.props.title}</Typography>
                     </a>
                     <Typography variant="body1" style={{overflowWrap: "break-word"}}> {this.props.username} | {date.toDateString().replace(/^\S+\s/,'')}</Typography>
@@ -71,7 +70,7 @@ class Forum extends Component {
                 <Box className="outlinedWhiteBox columnPosts">
                     {console.log(this.state.threads)}
                     {this.state.threads.map((thread, index) =>
-                        <ThreadThumbnail key={index} id={thread.id} username={thread.username} title={thread.title} date={thread.date} likes={thread.likes}/>                      
+                        <ThreadThumbnail key={index} id={thread.id} uid={thread.uid} username={thread.username} title={thread.title} date={thread.date} likes={thread.likes}/>                      
                     )}
                 </Box>
             </div>

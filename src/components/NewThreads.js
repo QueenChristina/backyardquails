@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import profile from '../assets/profile3.svg';
+import {convertToLink} from '../utils.js';
 
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
@@ -15,7 +16,7 @@ class ThreadThumbnail extends Component {
   
     render() {
         return (
-            <a href={"/threads/" + this.props.id}>
+            <a href={"/threads/" + convertToLink(this.props.title) + "/" + this.props.uid}>
                 <div>
                     <div style={{display:"inline-block"}}>
                         <img src={profile} style={{width: "49px"}}></img>
@@ -59,7 +60,7 @@ class NewThreads extends Component {
             <Typography variant="h3" className="heading">New Posts</Typography>
                 <Box className="colorBox columnPosts">
                 {this.state.threads.map((thread, index) =>
-                        <ThreadThumbnail key={index} id={thread.id} title={thread.title} date={thread.date} username={thread.username} category={thread.category}/>                      
+                        <ThreadThumbnail key={index} id={thread.id} uid={thread.uid} title={thread.title} date={thread.date} username={thread.username} category={thread.category}/>                      
                     )
                 }
                 </Box>

@@ -13,10 +13,14 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 
 import './styles/App.css';
+import db from './firebase';
+
 
 class App extends Component {
   constructor() {
     super();
+
+
   }
 
   render() {
@@ -30,8 +34,7 @@ class App extends Component {
                 <Route path="/" element={<FeaturedContent/>}/>
                 <Route path="/forums" element={<Forums/>}/>
                 <Route path="/articles" element={<Articles/>}/>
-                {/* <Route path="/threads/post" element={<Thread id = 'ry8j2gwkkq4JK0YtBJ4J'/>}/> */}
-                <Route path="/threads/:id" element={<Thread id = 'ry8j2gwkkq4JK0YtBJ4J'/>}/>
+                <Route path="/threads/*" element={<Thread id = {"4RekNGDE2ThNFB7Ofbeh"}/>}/>
                 <Route path="*" element={<p>Link not found.</p>} />
 
                 <Route path="/forums/incubating-and-hatching-eggs" element={<Forum category="Incubating and Hatching Eggs"/>}/>
