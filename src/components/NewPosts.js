@@ -14,13 +14,13 @@ class PostThumbnail extends Component {
   
     render() {
         return (
-            <a href="google.com">
+            <a href="/threads/post">
                 <div>
                     <div style={{display:"inline-block"}}>
-                        <img src={profile} style={{width: "52px"}}></img>
+                        <img src={profile} style={{width: "49px"}}></img>
                     </div>
                     <div style={{display:"inline-block"}}>
-                        <Typography variant="body1"> {this.props.title} </Typography>
+                        <Typography variant="h6"> {this.props.title} </Typography>
                         <Typography variant="body1"> {this.props.category} </Typography>
                         <Typography variant="body1"> {this.props.author} | {this.props.time} ago </Typography>
                     </div>
@@ -39,7 +39,7 @@ class NewPosts extends Component {
         return (
             <div>
             <Typography variant="h3" className="heading">New Posts</Typography>
-                <Box className="colorBox">
+                <Box className="colorBox columnPosts">
                     <PostThumbnail title="Post Title" category="Category" author="Author" time="5 minutes"/>
                     <PostThumbnail title="Post Title" category="Category" author="Author" time="15 minutes"/>
                     <PostThumbnail title="Post Title" category="Category" author="Author" time="5 minutes"/>

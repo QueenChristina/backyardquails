@@ -1,7 +1,11 @@
 import React, { Component } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NavBar from './components/NavBar.js';
 import NewPosts from './components/NewPosts.js';
 import FeaturedContent from "./components/FeaturedContent.js";
+import Thread from "./components/Thread.js";
+import Forums from "./components/Forums.js";
+import Articles from "./components/Articles.js";
 
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -28,7 +32,13 @@ class App extends Component {
         <div className="contentContainer">
           <Grid container spacing={2}>
             <Grid item xs={12} md={8}>
-              <FeaturedContent/>
+              <Routes>
+                <Route path="/" element={<FeaturedContent/>}/>
+                <Route path="/forums" element={<Forums/>}/>
+                <Route path="/articles" element={<Articles/>}/>
+                <Route path="/threads/post" element={<Thread/>}/>
+                <Route path="*" element={<p>Link not found.</p>} />
+              </Routes>
             </Grid>
             <Grid item xs={12} md={4}>
               <NewPosts/>

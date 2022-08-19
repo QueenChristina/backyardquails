@@ -7,7 +7,8 @@ const config = {
     './src/index.js'
   ],
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'public/'),
+    publicPath: '/public',
     filename: 'bundle.js'
   },
   module: {
@@ -20,17 +21,20 @@ const config = {
       {
         test: /\.css$/,
         use: [ 'style-loader', 'css-loader' ]
-      }
-      
+      },
+      {
+        test: /\.svg$/,
+        use: ['@svgr/webpack'],
+      },
     ],
     loaders: [
       { test: /\.css$/, loader: "style-loader!css-loader" },
     ]
   },
   devServer: {
-    'static': {
-      directory: './dist'
-    }
+    contentBase: 'public',
+    watchContentBase: true
+  }
   }
 };
 
