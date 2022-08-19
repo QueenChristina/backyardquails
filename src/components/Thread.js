@@ -1,11 +1,14 @@
 import React, { Component, useEffect } from "react";
 import {ReactComponent as BackArrow} from '../assets/back-arrow.svg';
 import profile from '../assets/profile3.svg';
+import { useParams } from "react-router-dom";
 
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { TextField } from "@material-ui/core";
+
+import {convertToLink} from '../utils.js';
 
 import '../styles/App.css';
 import db from '../firebase';
@@ -19,14 +22,14 @@ class Post extends Component {
       render() {
         let date = new Date(this.props.date.seconds * 1000);
           return (
-            <div style={{display: "flex"}}>
-                <div style={{display:"flex", flexDirection: "column"}}>
+            <div style={{display: "flex"}} className="post">
+                <div style={{display:"flex", flexDirection: "column", width: "150px"}}>
                     <img src={profile} style={{width: "49px", margin: "auto"}}></img>
-                    <Typography variant="h6"> {this.props.username} </Typography>
-                    <Typography variant="body1"> {date.toDateString()} </Typography>
+                    <Typography variant="h6" style={{wordWrap:"break-word", textAlign:"center"}}> {this.props.username} </Typography>
+                    <Typography variant="body1" style={{textAlign:"center"}}> {date.toDateString().replace(/^\S+\s/,'')} </Typography>
                 </div>
-                <div>
-                    <Typography variant="body1"> {this.props.text} </Typography>
+                <div style={{width:"calc(100% - 150px)"}}>
+                    <Typography variant="body1" style={{overflowWrap: "break-word"}}> {this.props.text} </Typography>
                 </div>
             </div>
           );
@@ -80,40 +83,43 @@ class PostForm extends Component {
       }
 }
 
+function withParams(Component) {
+    return props => <Component {...props} params={useParams()} />;
+}
+
 class Thread extends Component {
     constructor(props) {
       super(props);
 
-      this.state = {posts: []};
-    }
+      this.state = {
+        title: "", 
+        posts: [],
+        category: ""
+    };
 
-    // getPosts = () => {
-    //     let id = 'ry8j2gwkkq4JK0YtBJ4J';
-    //     db.collection('threads/' + id + '/Posts').get().then(snapshot => {
-    //         this.setState( {
-    //             posts: snapshot.docs.map(x => x.data())
-    //         })
-    //     }
-    //     );
-    // }
+        this.id = "";
+    }
   
     componentDidMount() {
-        // this.getPosts();
+        this.id = this.props.params.id;
+        console.log("/////////////////////path id//////")
+        console.log(this.id);
+        console.log(this.props.id);
 
-        let id = 'ry8j2gwkkq4JK0YtBJ4J';
-        db.collection('threads/' + id + '/Posts').orderBy("date", "asc").onSnapshot(snapshot => 
+        // Update posts realtime
+        db.collection('threads/' + this.id + '/Posts').orderBy("date", "asc").onSnapshot(snapshot => 
             this.setState({
                 posts: snapshot.docs.map(x => x.data())
             })
         );
-        // useEffect(() => {
-        //     db.collection('threads/' + id + '/Posts').onSnapshot(snapshot => 
-        //         this.setState({
-        //             posts: snapshot.docs.map(x => x.data())
-        //         })
-        //     )
-        //     }, []);
         console.log(this.state.posts);
+
+        db.collection('threads').doc(this.props.id).get().then ( (snapshot) =>
+            this.setState({
+                title: snapshot.data().title,
+                category: snapshot.data().category
+            })
+        );
     }
 
     render() {
@@ -122,9 +128,12 @@ class Thread extends Component {
                 <div>
                     <Typography variant="h3" className="heading">
                         <a href="/forums" style={{paddingRight: "15px"}}>
-                        <BackArrow style={{maxWidth:"12px", fill: "white"}} />
+                            <BackArrow style={{maxWidth:"12px", fill: "white"}} />
                         </a>
-                        Thread
+                        <a href={"/forums/" + convertToLink(this.props.title)} style={{paddingRight: "15px"}}>
+                            {this.state.category}
+                        </a>
+                        / {this.state.title}
                     </Typography>
                 </div>
                 <Box className="outlinedWhiteBox columnPosts">
@@ -132,11 +141,11 @@ class Thread extends Component {
                     {this.state.posts.map((post, index) =>
                         <Post key={index} username={post.username} text={post.text} date={post.date} likes={post.likes}/>                      
                     )}
-                    <PostForm threadId='ry8j2gwkkq4JK0YtBJ4J'/>
+                    <PostForm threadId={this.props.id}/>
                 </Box>
             </div>
         );
     }
 }
 
-export default Thread;
+export default withParams(Thread);

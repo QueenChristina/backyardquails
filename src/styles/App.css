@@ -40,13 +40,19 @@ body {
     background-color: white;
     border-radius: 0 0 10px 10px;
     border: 1px solid #5B504D;
-    padding: 12px;
+    padding: 0px;
+    padding-bottom: 12px;
 }
 
 .columnPosts {
     display: flex;
     flex-direction: column;
     row-gap: 10px;
+}
+
+.post {
+    border-bottom: 1px solid #816962;
+    padding: 10px;
 }
 
 .heading {
