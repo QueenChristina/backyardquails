@@ -35,9 +35,15 @@ class Thread extends Component {
     }
   
     componentDidMount() {
-        this.category = this.props.params["*"];
-        console.log(this.props.params);
-        console.log(this.category);
+        console.log(this.props.params["*"]);
+        if (this.props.params["*"] != "") {
+            this.setState( {
+                category: LINKTOCATEGORY[this.props.params["*"]]
+            })
+    
+            console.log(this.category);
+        }
+
     }
 
     sendPost = () => {
@@ -59,19 +65,24 @@ class Thread extends Component {
     
                     db.collection('uidToId').doc('threads').set(newId, { merge: true });
     
-                    db.collection('threads/' + newDocRef.id + '/Posts').add({
-                        username: "TempUser",
-                        text: this.state.text,
-                        likes: 0,
-                        date: firebase.firestore.Timestamp.now(),
-                    })
+                    if (this.state.text != "") {
+                        db.collection('threads/' + newDocRef.id + '/Posts').add({
+                            username: "TempUser",
+                            text: this.state.text,
+                            likes: 0,
+                            date: firebase.firestore.Timestamp.now(),
+                        }).then((docRef)=>{
+                            location.href = "/threads/" + convertToLink(this.state.title) + "." + newThreadIndex;
+                        });
+                    } else {
+                        location.href = "/threads/" + convertToLink(this.state.title) + "." + newThreadIndex;
+                    }
+
                 })
-                // location.href = "/threads/" + convertToLink(this.state.title) + "." + (snapshot.data().lastThreadIndex + 1);
+            
                 db.collection('values').doc('global').update({
                     lastThreadIndex: snapshot.data().lastThreadIndex + 1
                 });
-
-                
             });
 
         } else {
@@ -103,7 +114,7 @@ class Thread extends Component {
             <div>
                 <div>
                     <Typography variant="h3" className="heading">
-                        <a href="/forums" style={{paddingRight: "15px"}}>
+                        <a href="/forums" style={{paddingRight: "15px", color: "white"}}>
                             <BackArrow style={{maxWidth:"12px", fill: "white"}} />
                         </a>
                         Post Thread
@@ -116,6 +127,7 @@ class Thread extends Component {
                         onChange={this.handleChangeTitle}
                         value={this.state.title}
                         variant="filled"
+                        inputProps={{ maxLength: 120 }}
                     />
 
                     {this.state.missingTitleError &&
@@ -123,12 +135,14 @@ class Thread extends Component {
                     }
 
                     <TextField
-                        id="outlined-select-category"
+                        id="outlined-basic"
                         select
                         label="Category"
                         value={this.state.category}
                         onChange={this.handleChangeCategory}
                         helperText="Please select which forum to post to."
+                        className="select"
+                        variant="outlined" 
                         >
                         {FORUMCATEGORIES.map((option) => (
                             <MenuItem key={option} value={option}>
@@ -150,7 +164,7 @@ class Thread extends Component {
         
                     <div style={{display: "flex"}}>
                         <div style={{flexGrow: 1}}></div>
-                        <Button onClick={this.sendPost} style={{margin: "10px"}} className="baseButton">Post</Button>
+                        <Button onClick={this.sendPost} style={{margin: "10px", minHeight: "35px"}} className="baseButton">Post</Button>
                     </div>  
                 </Box>
             </div>

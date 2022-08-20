@@ -1,6 +1,6 @@
 export const FORUMCATEGORIES = ["Incubating and Hatching Eggs",
                                 "Raising Babies",
-                                "Aviary Design, Construction, Maintenance",
+                                "Aviary and Hutches",
                                 "Feeding and Watering",
                                 "Emergencies, Diseases, and Injuries",
                                 "Predators and Pests",
@@ -8,6 +8,17 @@ export const FORUMCATEGORIES = ["Incubating and Hatching Eggs",
                                 "Meat Bird",
                                 "Laws",
                                 "Pictures and Stories"];
+
+export const ARTICLECATEGORIES = [  "Getting Started",
+                                    "Hatching and Raising",
+                                    "Diseases, Injuries, and Cures",
+                                    "Predators and Pests",
+                                    "Feeders and Waterers",
+                                    "Housing",
+                                    "Maintaining a Healthy Lifestyle",
+                                    "Meat Bird and Processing",
+                                    "Other"
+                                ]
 
 export let LINKTOCATEGORY = {}
 

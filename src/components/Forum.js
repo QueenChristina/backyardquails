@@ -63,7 +63,7 @@ class Forum extends Component {
             <div>
                 <div style={{display: "flex", backgroundColor: "#816962"}}>
                     <Typography variant="h3" className="heading">
-                        <a href="/forums" style={{paddingRight: "15px"}}>
+                        <a href="/forums" style={{paddingRight: "15px", color: "white"}}>
                             <BackArrow style={{maxWidth:"12px", fill: "white"}} />
                         </a>
                         {this.props.category}

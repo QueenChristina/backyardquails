@@ -20,8 +20,6 @@ import db from './firebase';
 class App extends Component {
   constructor() {
     super();
-
-
   }
 
   render() {
@@ -41,7 +39,7 @@ class App extends Component {
 
                 <Route path="/forums/incubating-and-hatching-eggs" element={<Forum category="Incubating and Hatching Eggs"/>}/>
                 <Route path="/forums/raising-babies" element={<Forum category="Raising Babies"/>}/>
-                <Route path="/forums/aviary-design-construction-maintenance" element={<Forum category="Aviary Design, Construction, Maintenance"/>}/>
+                <Route path="/forums/aviary-and-hutches" element={<Forum category="Aviary Design, Construction, Maintenance"/>}/>
                 <Route path="/forums/feeding-and-watering" element={<Forum category="Feeding and Watering"/>}/>
                 <Route path="/forums/emergencies-diseases-and-injuries" element={<Forum category="Emergencies, Diseases, and Injuries"/>}/>
                 <Route path="/forums/predators-and-pests" element={<Forum category="Predators and Pests"/>}/>
@@ -58,11 +56,11 @@ class App extends Component {
         </div>
         <div style={{flexGrow: 1}}></div>
         <footer>
-          <Typography variant="body1" style={{display: "inline"}}>BackyardQuails (c) 2022</Typography>
+          <Typography variant="body1" style={{display: "inline", margin: "auto"}}>BackyardQuails (c) 2022</Typography>
           <div style={{ flex: 1 }}></div>
-          <Button><a href="google.com"> Contact Us </a></Button>
-          <Button><a href="google.com"> Terms and Rules </a></Button>
-          <Button><a href="google.com"> Privacy Policy </a></Button>
+          <Button><a href="google.com" style={{color: "white"}}> Contact Us </a></Button>
+          <Button><a href="google.com" style={{color: "white"}}> Terms and Rules </a></Button>
+          <Button><a href="google.com" style={{color: "white"}}> Privacy Policy </a></Button>
         </footer>
       </div>
     );

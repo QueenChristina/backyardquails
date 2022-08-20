@@ -44,7 +44,6 @@ class PostForm extends Component {
       }
 
     handleChange = (event) => {
-        console.log("changed to" + event.target.value);
         this.setState({
             text: event.target.value
         });
@@ -135,10 +134,10 @@ class Thread extends Component {
             <div>
                 <div>
                     <Typography variant="h3" className="heading">
-                        <a href="/forums" style={{paddingRight: "15px"}}>
+                        <a href="/forums" style={{paddingRight: "15px", color: "white"}}>
                             <BackArrow style={{maxWidth:"12px", fill: "white"}} />
                         </a>
-                        <a href={"/forums/" + convertToLink(this.state.category)} style={{paddingRight: "15px"}}>
+                        <a href={"/forums/" + convertToLink(this.state.category)} style={{paddingRight: "15px", color: "white"}}>
                             {this.state.category}
                         </a>
                         / {this.state.title}

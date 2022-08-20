@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import profile from '../assets/profile3.svg';
-import {convertToLink} from '../utils.js';
+import {convertToLink, timestampToString} from '../utils.js';
 
 import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
@@ -15,19 +15,21 @@ class ThreadThumbnail extends Component {
     }
   
     render() {
-        return (
-            <a href={"/threads/" + convertToLink(this.props.title) + "." + this.props.uid}>
-                <div>
-                    <div style={{display:"inline-block"}}>
+        return (            
+                <div style={{display: "flex"}}>
+                    <div style={{display:"inline-block", margin: "10px", marginTop: "auto", marginBottom: "auto"}}>
                         <img src={profile} style={{width: "49px"}}></img>
                     </div>
                     <div style={{display:"inline-block"}}>
-                        <Typography variant="h6"> {this.props.title} </Typography>
-                        <Typography variant="body1"> {this.props.category} </Typography>
-                        <Typography variant="body1"> {this.props.username} | 5 minutes ago </Typography>
+                        <a href={"/threads/" + convertToLink(this.props.title) + "." + this.props.uid}>
+                            <Typography variant="h6" style={{color: "black"}}> {this.props.title} </Typography>
+                        </a>
+                        <a href={"/forums/" + convertToLink(this.props.category)}>
+                            <Typography variant="body1"> {this.props.category} </Typography>
+                        </a>
+                        <Typography variant="body1"> {this.props.username} | {timestampToString(this.props.date)} </Typography>
                     </div>
                 </div>
-            </a>
         );
     }
 }

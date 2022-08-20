@@ -24,7 +24,7 @@ class NavBar extends Component {
         return (
         <header className="navBar">
             <Bird style={{maxWidth: "52px", maxHeight: "52px", fill: "white"}}/>
-            <Typography variant="h2" style={{fontSize: "2rem", padding: "0px 10px"}}  onClick={() => { this.goTo("/");}}>BackyardQuails</Typography>
+            <Typography variant="h2" style={{fontSize: "2rem", padding: "0px 10px", margin: "auto"}}  onClick={() => { this.goTo("/");}}>BackyardQuails</Typography>
             
             <Button className="baseButton" onClick={() => { this.goTo("/forums");}}>
                 <TextBubbleIcon className="icon"/>
