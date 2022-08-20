@@ -14,6 +14,9 @@ import '../styles/App.css';
 import db from '../firebase';
 import firebase from "firebase/app";
 
+import TextEditor from "./TextEditor";
+import draftToHtml from "draftjs-to-html";
+
 class Post extends Component {
     constructor() {
         super();
@@ -28,8 +31,13 @@ class Post extends Component {
                     <Typography variant="h6" style={{wordWrap:"break-word", textAlign:"center"}}> {this.props.username} </Typography>
                     <Typography variant="body1" style={{textAlign:"center"}}> {timestampToString(this.props.date)} </Typography>
                 </div>
-                <div style={{width:"calc(100% - 150px)"}}>
+                <div style={{width:"calc(100% - 150px)", overflowWrap: "break-word"}}>
                     <Typography variant="body1" style={{overflowWrap: "break-word"}}> {this.props.text} </Typography>
+                    {(this.props.rawContent != undefined) && 
+                    <div     
+                        dangerouslySetInnerHTML={{
+                        __html: draftToHtml(this.props.rawContent)}}/>
+                    }
                 </div>
             </div>
           );
@@ -40,7 +48,11 @@ class PostForm extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {text: ""};
+        this.state = {
+            text: "",
+            editorKey: 0
+        };
+        this.content = {};
       }
 
     handleChange = (event) => {
@@ -49,15 +61,21 @@ class PostForm extends Component {
         });
       }
 
+    setContent = (value) => {
+        this.content = value;
+    }
+
     sendPost = () => {
         db.collection('threads/' + this.props.threadId + '/Posts').add({
             username: "TempUser",
             text: this.state.text,
+            rawContent: this.content,
             likes: 0,
             date: firebase.firestore.Timestamp.now()
         })
         this.setState({
-            text: ""
+            text: "",
+            editorKey: this.state.editorKey + 1
         });
     }
     
@@ -66,15 +84,7 @@ class PostForm extends Component {
             <div style={{display: "flex", padding: "10px"}}>
                 <img src={profile}  style={{width: "49px", width: "150px"}}></img>
                 <div style={{display: "flex", flexDirection: "column", width: "100%"}}>
-                    <TextField
-                        id="filled-multiline-flexible"
-                        label="Post your reply"
-                        multiline
-                        maxRows={8}
-                        onChange={this.handleChange}
-                        value={this.state.text}
-                        variant="filled"
-                        />
+                        <TextEditor key={this.state.editorKey} onChange={this.setContent}/>
                     <div style={{display: "flex"}}>
                         <div style={{flexGrow: 1}}></div>
                         <Button onClick={this.sendPost} style={{margin: "10px"}}>Post</Button>
@@ -146,7 +156,7 @@ class Thread extends Component {
                 <Box className="outlinedWhiteBox columnPosts">
                     {console.log(this.state.posts)}
                     {this.state.posts.map((post, index) =>
-                        <Post key={index} username={post.username} text={post.text} date={post.date} likes={post.likes}/>                      
+                        <Post key={index} username={post.username} rawContent={post.rawContent} text={post.text} date={post.date} likes={post.likes}/>                      
                     )}
                     <PostForm threadId={this.state.id}/>
                 </Box>

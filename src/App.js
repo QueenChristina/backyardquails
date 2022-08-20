@@ -8,6 +8,7 @@ import Thread from "./components/Thread.js";
 import Forums from "./components/Forums.js";
 import Articles from "./components/Articles.js";
 import Forum from "./components/Forum.js";
+import TextEditor from "./components/TextEditor.js";
 
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -35,11 +36,12 @@ class App extends Component {
                 <Route path="/articles" element={<Articles/>}/>
                 <Route path="/threads/*" element={<Thread/>}/>
                 <Route path="/forums/post-thread/*" element={<NewThread/>}/>
+                <Route path="/text-editor" element={<TextEditor/>}/>
                 <Route path="*" element={<p>Link not found.</p>} />
 
                 <Route path="/forums/incubating-and-hatching-eggs" element={<Forum category="Incubating and Hatching Eggs"/>}/>
                 <Route path="/forums/raising-babies" element={<Forum category="Raising Babies"/>}/>
-                <Route path="/forums/aviary-and-hutches" element={<Forum category="Aviary Design, Construction, Maintenance"/>}/>
+                <Route path="/forums/aviary-and-hutches" element={<Forum category="Aviary and Hutches"/>}/>
                 <Route path="/forums/feeding-and-watering" element={<Forum category="Feeding and Watering"/>}/>
                 <Route path="/forums/emergencies-diseases-and-injuries" element={<Forum category="Emergencies, Diseases, and Injuries"/>}/>
                 <Route path="/forums/predators-and-pests" element={<Forum category="Predators and Pests"/>}/>

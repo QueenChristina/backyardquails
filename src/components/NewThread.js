@@ -2,6 +2,7 @@ import React, { Component, useEffect } from "react";
 import {ReactComponent as BackArrow} from '../assets/back-arrow.svg';
 import profile from '../assets/profile3.svg';
 import { useParams } from "react-router-dom";
+import TextEditor from "./TextEditor";
 
 import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
@@ -32,6 +33,8 @@ class Thread extends Component {
     };
 
         this.uid = ""; // url after /forums/
+        this.content = {};
+        this.contentText = "";
     }
   
     componentDidMount() {
@@ -65,17 +68,18 @@ class Thread extends Component {
     
                     db.collection('uidToId').doc('threads').set(newId, { merge: true });
     
-                    if (this.state.text != "") {
+                    if (this.contentText == "" && this.state.text == "") {
+                        location.href = "/threads/" + convertToLink(this.state.title) + "." + newThreadIndex;
+                    } else {
                         db.collection('threads/' + newDocRef.id + '/Posts').add({
                             username: "TempUser",
                             text: this.state.text,
+                            rawContent: this.content,
                             likes: 0,
                             date: firebase.firestore.Timestamp.now(),
                         }).then((docRef)=>{
                             location.href = "/threads/" + convertToLink(this.state.title) + "." + newThreadIndex;
                         });
-                    } else {
-                        location.href = "/threads/" + convertToLink(this.state.title) + "." + newThreadIndex;
                     }
 
                 })
@@ -106,6 +110,11 @@ class Thread extends Component {
         this.setState({
             category: event.target.value
         });
+    }
+
+    setContent = (rawContent, contentPlainText) => {
+        this.content = rawContent;
+        this.contentText = contentPlainText;
     }
     
 
@@ -151,7 +160,7 @@ class Thread extends Component {
                         ))}
                         </TextField>
 
-                    <TextField
+                    {/* <TextField
                         id="filled-multiline-flexible"
                         label="Description"
                         multiline
@@ -160,7 +169,9 @@ class Thread extends Component {
                         value={this.state.text}
                         variant="filled"
                         style={{minHeight: "300px"}}
-                        />
+                        /> */}
+                    <TextEditor onChange={this.setContent}/>
+                    
         
                     <div style={{display: "flex"}}>
                         <div style={{flexGrow: 1}}></div>

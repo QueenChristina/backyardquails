@@ -2,6 +2,7 @@ body {
     margin: 0 !important;
     padding: 0 !important;
     background-color: #D9D9D9;
+    font-family: sans-serif;
 }
 
 .pageContainer {
@@ -137,3 +138,25 @@ a:link {
     border-radius: 10px;
     padding: 5px 10px;
 }
+
+.editorStyle {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.rdw-editor-main {
+    height: auto !important;
+    overflow: hidden !important;
+}
+
+span[class^='ImageSpan_'] {
+    letter-spacing: 0 !important;
+    background-size: contain !important;
+    width: 100% !important;
+    height: auto !important;
+    font-size: medium !important;
+    line-height: 200px !important;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
