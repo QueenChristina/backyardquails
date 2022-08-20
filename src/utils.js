@@ -21,9 +21,14 @@ export const ARTICLECATEGORIES = [  "Getting Started",
                                 ]
 
 export let LINKTOCATEGORY = {}
+export let LINKTOARTICLECATEGORY = {}
 
 FORUMCATEGORIES.forEach((category) => {
     LINKTOCATEGORY[convertToLink(category)] = category;
+});
+
+ARTICLECATEGORIES.forEach((category) => {
+    LINKTOARTICLECATEGORY[convertToLink(category)] = category;
 });
 
 console.log(LINKTOCATEGORY);

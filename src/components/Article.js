@@ -17,7 +17,7 @@ import firebase from "firebase/app";
 import TextEditor from "./TextEditor";
 import draftToHtml from "draftjs-to-html";
 
-class Post extends Component {
+class Comment extends Component {
     constructor() {
         super();
       }
@@ -32,7 +32,6 @@ class Post extends Component {
                     <Typography variant="body1" style={{textAlign:"center"}}> {timestampToString(this.props.date)} </Typography>
                 </div>
                 <div style={{width:"calc(100% - 150px)", overflowWrap: "break-word"}}>
-                    <Typography variant="body1" style={{overflowWrap: "break-word"}}> {this.props.text} </Typography>
                     {(this.props.rawContent != undefined) && 
                     <div     
                         dangerouslySetInnerHTML={{
@@ -49,16 +48,9 @@ class PostForm extends Component {
         super(props);
 
         this.state = {
-            text: "",
             editorKey: 0
         };
         this.content = {};
-      }
-
-    handleChange = (event) => {
-        this.setState({
-            text: event.target.value
-        });
       }
 
     setContent = (value) => {
@@ -66,9 +58,8 @@ class PostForm extends Component {
     }
 
     sendPost = () => {
-        db.collection('threads/' + this.props.threadId + '/Posts').add({
+        db.collection('articles/' + this.props.articleId + '/Comments').add({
             username: "TempUser",
-            text: this.state.text,
             rawContent: this.content,
             likes: 0,
             date: firebase.firestore.Timestamp.now()
@@ -99,40 +90,46 @@ function withParams(Component) {
     return props => <Component {...props} params={useParams()} />;
   }
 
-class Thread extends Component {
+class Article extends Component {
     constructor(props) {
       super(props);
 
       this.state = {
         title: "", 
-        posts: [],
+        username: "",
+        date: {},
+        comments: [],
         category: "",
-        id : "" // document id cooresponding to thread
+        id : "", // document id cooresponding to thread
+        rawContent: {}
     };
 
-        this.uid = ""; // url after /thread/
+        this.uid = ""; // url after /articles/
     }
   
     componentDidMount() {
         // uid is the thread index by creation order
         this.uid = this.props.params["*"].split(".")[1];
 
-        db.collection("uidToId").doc("threads").get().then ( (snapshot) => {
+        db.collection("uidToId").doc("articles").get().then ( (snapshot) => {
             this.setState(
                 {id: snapshot.data()[this.uid]}
             );
 
             // Update posts realtime
-            db.collection('threads/' + this.state.id + '/Posts').orderBy("date", "asc").onSnapshot(snapshot => 
+            db.collection('articles/' + this.state.id + '/Comments').orderBy("date", "asc").onSnapshot(snapshot => 
                 this.setState({
-                    posts: snapshot.docs.map(x => x.data())
+                    comments: snapshot.docs.map(x => x.data())
                 })
             );
     
-            db.collection('threads').doc(this.state.id).get().then ( (snapshot) =>
+            db.collection('articles').doc(this.state.id).get().then ( (snapshot) =>
                 this.setState({
                     title: snapshot.data().title,
-                    category: snapshot.data().category
+                    username: snapshot.data().username,
+                    date: snapshot.data().date,
+                    category: snapshot.data().category,
+                    rawContent: snapshot.data().rawContent,
                 })
             );
         }
@@ -144,25 +141,36 @@ class Thread extends Component {
             <div>
                 <div>
                     <Typography variant="h3" className="heading">
-                        <a href="/forums" style={{paddingRight: "15px", color: "white"}}>
-                            <BackArrow style={{maxWidth:"12px", fill: "white"}} />
-                        </a>
-                        <a href={"/forums/" + convertToLink(this.state.category)} style={{paddingRight: "15px", color: "white"}}>
-                            {this.state.category}
-                        </a>
-                        / {this.state.title}
+                        {this.state.title}
                     </Typography>
-                </div>
+                </div>          
                 <Box className="outlinedWhiteBox columnPosts">
-                    {console.log(this.state.posts)}
-                    {this.state.posts.map((post, index) =>
-                        <Post key={index} username={post.username} rawContent={post.rawContent} text={post.text} date={post.date} likes={post.likes}/>                      
+                    <div style={{padding: "10px"}}>
+                        <Typography variant="body1" style={{backgroundColor: "#D9D9D9", padding: "5px 10px", borderRadius: "10px"}}>{this.state.category} | {this.state.username} | {timestampToString(this.state.date)}</Typography>
+                    </div>  
+                    {(this.state.rawContent != undefined) && 
+                    <div style={{padding: "10px"}}>
+                        <div     
+                            dangerouslySetInnerHTML={{
+                            __html: draftToHtml(this.state.rawContent)}}/>
+                    </div>
+                    }
+                </Box>
+
+                <div style={{marginTop: "15px"}}>
+                    <Typography variant="h3" className="heading">
+                        Comments
+                    </Typography>
+                </div> 
+                <Box className="outlinedWhiteBox columnPosts">
+                    {this.state.comments.map((comment, index) =>
+                        <Comment key={index} username={comment.username} rawContent={comment.rawContent} date={comment.date} likes={comment.likes}/>                      
                     )}
-                    <PostForm threadId={this.state.id}/>
+                    <PostForm articleId={this.state.id}/>
                 </Box>
             </div>
         );
     }
 }
 
-export default  withParams(Thread);
+export default  withParams(Article);

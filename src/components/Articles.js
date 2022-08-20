@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import { TextField } from "@material-ui/core";
 import MenuItem from '@material-ui/core/MenuItem';
 
-import {ARTICLECATEGORIES, LINKTOCATEGORY, convertToLink} from '../utils.js';
+import {ARTICLECATEGORIES, LINKTOCATEGORY, convertToLink, timestampToString} from '../utils.js';
 
 import '../styles/App.css';
 import db from '../firebase';
@@ -24,10 +24,10 @@ class ArticleThumbnail extends Component {
       render() {
         return(
             <div style={{display: "columnPosts"}}>
-                <a href="/articles/article-sample">
+                <a href={"/article/" + convertToLink(this.props.title) + "." + this.props.uid}>
                     <img src={this.props.thumbImg} style={{width: "100%", maxHeight: "100%"}}></img>
+                    <Typography variant="h4" className="heading4">{this.props.title}</Typography>
                 </a>
-                <Typography variant="h4" className="heading4">{this.props.title}</Typography>
                 <Typography variant="body1">{this.props.username} | {this.props.date} </Typography>
                 <Typography variant="body1" style={{color: "#888888"}}>{this.props.description} </Typography>
             </div>
@@ -40,8 +40,34 @@ class Articles extends Component {
       super(props);
 
       this.state = {
-        category: ""
+        category: "",
+        articles: [],
       }
+    }
+
+    componentDidMount() {
+        // Update threads realtime
+        if (this.state.category == "") {
+            db.collection("articles").orderBy("date", "asc").onSnapshot(snapshot => 
+                this.setState({
+                    articles: snapshot.docs.slice(0, 18).map(x => {
+                        const data = x.data();
+                        const id = x.id;
+                        return { id, ...data };
+                    })
+                })
+            );
+        } else {
+            db.collection("articles").where("category", "==", this.state.category).orderBy("date", "asc").onSnapshot(snapshot => 
+                this.setState({
+                    articles: snapshot.docs.slice(0, 18).map(x => {
+                        const data = x.data();
+                        const id = x.id;
+                        return { id, ...data };
+                    })
+                })
+            );
+        }
     }
 
     handleChangeCategory = (event) => {
@@ -53,7 +79,11 @@ class Articles extends Component {
     render() {
         return (
             <div>
-                <Typography variant="h3" className="heading">Articles</Typography>
+                <div style={{display: "flex", backgroundColor: "#816962"}}>
+                    <Typography variant="h3" className="heading">Articles</Typography>
+                    <div style={{flexGrow: 1}}></div>
+                    <Button className="baseButton" onClick={() => {location.href="/articles/post/"}}>+ Post Article</Button>
+                </div>
                 <Box  className="outlinedWhiteBox" style={{padding: "10px"}}>
                     <TextField
                         id="outlined-basic"
@@ -73,62 +103,18 @@ class Articles extends Component {
                         </TextField>
 
                     <Grid container spacing={2} style={{marginTop:"12px"}}>
-                        <Grid item xs={12} md={6} lg={4}>
+                        {this.state.articles.map((article, index) =>
+                            <Grid item xs={12} md={6} lg={4}>
                             <ArticleThumbnail 
-                                title="Article Title" 
-                                username="TempUser" 
-                                date="Feb 13 2022" 
-                                description="Description text blah" 
-                                thumbImg="https://www.backyardchickens.com/images/fc/hp-01/2022-08-13_08-30-38.jpg"/>
-                        </Grid>
-                        <Grid item xs={12} md={6} lg={4}>
-                            <ArticleThumbnail 
-                                title="Article Title" 
-                                username="TempUser" 
-                                date="Feb 13 2022" 
-                                description="Description text blah" 
-                                thumbImg="https://www.backyardchickens.com/images/fc/hp-01/2022-08-13_08-30-38.jpg"/>
-                        </Grid>
-                        <Grid item xs={12} md={6} lg={4}>
-                            <ArticleThumbnail 
-                                title="Article Title" 
-                                username="TempUser" 
-                                date="Feb 13 2022" 
-                                description="Description text blah" 
-                                thumbImg="https://www.backyardchickens.com/images/fc/hp-01/2022-08-13_08-30-38.jpg"/>
-                        </Grid>
-                        <Grid item xs={12} md={6} lg={4}>
-                            <ArticleThumbnail 
-                                title="Article Title" 
-                                username="TempUser" 
-                                date="Feb 13 2022" 
-                                description="Description text blah" 
-                                thumbImg="https://www.backyardchickens.com/images/fc/hp-01/2022-08-13_08-30-38.jpg"/>
-                        </Grid>
-                        <Grid item xs={12} md={6} lg={4}>
-                            <ArticleThumbnail 
-                                title="Article Title" 
-                                username="TempUser" 
-                                date="Feb 13 2022" 
-                                description="Description text blah" 
-                                thumbImg="https://www.backyardchickens.com/images/fc/hp-01/2022-08-13_08-30-38.jpg"/>
-                        </Grid>
-                        <Grid item xs={12} md={6} lg={4}>
-                            <ArticleThumbnail 
-                                title="Article Title" 
-                                username="TempUser" 
-                                date="Feb 13 2022" 
-                                description="Description text blah" 
-                                thumbImg="https://www.backyardchickens.com/images/fc/hp-01/2022-08-13_08-30-38.jpg"/>
-                        </Grid>
-                        <Grid item xs={12} md={6} lg={4}>
-                            <ArticleThumbnail 
-                                title="Article Title" 
-                                username="TempUser" 
-                                date="Feb 13 2022" 
-                                description="Description text blah" 
-                                thumbImg="https://www.backyardchickens.com/images/fc/hp-01/2022-08-13_08-30-38.jpg"/>
-                        </Grid>
+                                key={index}
+                                title={article.title} 
+                                username={article.username}
+                                date={timestampToString(article.date)} 
+                                description={article.description} 
+                                thumbImg={article.thumbnail}
+                                uid={article.uid}/>
+                            </Grid>
+                        )}
                     </Grid>
                 </Box>
             </div>

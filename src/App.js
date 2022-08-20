@@ -9,6 +9,8 @@ import Forums from "./components/Forums.js";
 import Articles from "./components/Articles.js";
 import Forum from "./components/Forum.js";
 import TextEditor from "./components/TextEditor.js";
+import NewArticle from "./components/NewArticle.js";
+import Article from "./components/Article.js";
 
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -37,6 +39,8 @@ class App extends Component {
                 <Route path="/threads/*" element={<Thread/>}/>
                 <Route path="/forums/post-thread/*" element={<NewThread/>}/>
                 <Route path="/text-editor" element={<TextEditor/>}/>
+                <Route path="/articles/post/" element ={<NewArticle/>}/>
+                <Route path="/article/*" element ={<Article/>}/>
                 <Route path="*" element={<p>Link not found.</p>} />
 
                 <Route path="/forums/incubating-and-hatching-eggs" element={<Forum category="Incubating and Hatching Eggs"/>}/>
