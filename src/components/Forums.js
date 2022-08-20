@@ -5,26 +5,43 @@ import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-import {convertToLink} from '../utils.js';
+import {convertToLink, timestampToString, FORUMCATEGORIES} from '../utils.js';
 
 import '../styles/App.css';
+import db from '../firebase';
 
 class ForumThumbnail extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+
+        this.state = {latestThread : {
+            title: "Thread title",
+            date: {seconds: 1660806000, nanoseconds: 575000000}
+        }};
       }
+
+    componentDidMount() {
+        this.getLatestThreadFrom(this.props.category);
+    }
+
+    getLatestThreadFrom = (category) => {
+        db.collection("threads").where("category", "==", category).orderBy("date", "asc").get().then(snapshot => {
+            this.setState({latestThread: snapshot.docs[snapshot.docs.length - 1].data()});
+        }
+        );
+    }
     
       render() {
         return(
             <div className="post">
                 <div style={{display:"inline-block"}}>
-                    <img src={bird} style={{width: "52px"}}></img>
+                    <img src={this.props.icon} style={{width: "52px"}}></img>
                 </div>
                 <div style={{display:"inline-block"}}>
-                    <a href={"/forums/" + convertToLink(this.props.title)}>
-                        <Typography variant="h6"> {this.props.title} </Typography>
+                    <a href={"/forums/" + convertToLink(this.props.category)}>
+                        <Typography variant="h6"> {this.props.category} </Typography>
                     </a>
-                    <Typography variant="body1"> {this.props.latestPost}  | {this.props.time} ago </Typography>
+                    <Typography variant="body1"> {this.state.latestThread.title}  | {timestampToString(this.state.latestThread.date)} </Typography>
                 </div>
             </div>
         );
@@ -32,8 +49,8 @@ class ForumThumbnail extends Component {
 }
 
 class Forums extends Component {
-    constructor() {
-      super();
+    constructor(props) {
+      super(props);
     }
   
     render() {
@@ -41,16 +58,9 @@ class Forums extends Component {
             <div>
                 <Typography variant="h3" className="heading">Raising Backyard Quails</Typography>
                 <Box className="outlinedWhiteBox">
-                    <ForumThumbnail title="Incubating and Hatching Eggs" latestPost="Latest Post" time="5 minutes"/>
-                    <ForumThumbnail title="Raising Babies" latestPost="Latest Post" time="5 minutes"/>
-                    <ForumThumbnail title="Aviary and Coop Design, Construction, Maintenance" latestPost="Latest Post" time="5 minutes"/>
-                    <ForumThumbnail title="Feeding and Watering" latestPost="Latest Post" time="5 minutes"/>
-                    <ForumThumbnail title="Emergencies, Diseases, and Injuries" latestPost="Latest Post" time="5 minutes"/>
-                    <ForumThumbnail title="Predators and Pests" latestPost="Latest Post" time="5 minutes"/>
-                    <ForumThumbnail title="Behaviors and Eggs" latestPost="Latest Post" time="5 minutes"/>
-                    <ForumThumbnail title="Meat Bird" latestPost="Latest Post" time="5 minutes"/>
-                    <ForumThumbnail title="Laws" latestPost="Latest Post" time="5 minutes"/>
-                    <ForumThumbnail title="Pictures and Stories" latestPost="Latest Post" time="5 minutes"/>
+                    {FORUMCATEGORIES.map((category) => 
+                        <ForumThumbnail key={category} category={category} icon={bird}/>
+                    )}
                 </Box>
             </div>
         );

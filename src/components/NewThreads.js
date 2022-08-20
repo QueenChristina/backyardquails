@@ -16,7 +16,7 @@ class ThreadThumbnail extends Component {
   
     render() {
         return (
-            <a href={"/threads/" + convertToLink(this.props.title) + "/" + this.props.uid}>
+            <a href={"/threads/" + convertToLink(this.props.title) + "." + this.props.uid}>
                 <div>
                     <div style={{display:"inline-block"}}>
                         <img src={profile} style={{width: "49px"}}></img>

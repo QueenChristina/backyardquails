@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { useParams, Routes, Route } from "react-router-dom";
 import NavBar from './components/NavBar.js';
 import NewThreads from './components/NewThreads.js';
+import NewThread from "./components/NewThread.js";
 import FeaturedContent from "./components/FeaturedContent.js";
 import Thread from "./components/Thread.js";
 import Forums from "./components/Forums.js";
@@ -34,7 +35,8 @@ class App extends Component {
                 <Route path="/" element={<FeaturedContent/>}/>
                 <Route path="/forums" element={<Forums/>}/>
                 <Route path="/articles" element={<Articles/>}/>
-                <Route path="/threads/*" element={<Thread id = {"4RekNGDE2ThNFB7Ofbeh"}/>}/>
+                <Route path="/threads/*" element={<Thread/>}/>
+                <Route path="/forums/post-thread/*" element={<NewThread/>}/>
                 <Route path="*" element={<p>Link not found.</p>} />
 
                 <Route path="/forums/incubating-and-hatching-eggs" element={<Forum category="Incubating and Hatching Eggs"/>}/>

@@ -8,7 +8,7 @@ import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import { TextField } from "@material-ui/core";
 
-import {convertToLink} from '../utils.js';
+import {convertToLink, timestampToString} from '../utils.js';
 
 import '../styles/App.css';
 import db from '../firebase';
@@ -20,13 +20,13 @@ class Post extends Component {
       }
     
       render() {
-        let date = new Date(this.props.date.seconds * 1000);
+        
           return (
             <div style={{display: "flex"}} className="post">
                 <div style={{display:"flex", flexDirection: "column", width: "150px"}}>
                     <img src={profile} style={{width: "49px", margin: "auto"}}></img>
                     <Typography variant="h6" style={{wordWrap:"break-word", textAlign:"center"}}> {this.props.username} </Typography>
-                    <Typography variant="body1" style={{textAlign:"center"}}> {date.toDateString().replace(/^\S+\s/,'')} </Typography>
+                    <Typography variant="body1" style={{textAlign:"center"}}> {timestampToString(this.props.date)} </Typography>
                 </div>
                 <div style={{width:"calc(100% - 150px)"}}>
                     <Typography variant="body1" style={{overflowWrap: "break-word"}}> {this.props.text} </Typography>
@@ -52,7 +52,7 @@ class PostForm extends Component {
 
     sendPost = () => {
         db.collection('threads/' + this.props.threadId + '/Posts').add({
-            username: "TEMPuserTODO",
+            username: "TempUser",
             text: this.state.text,
             likes: 0,
             date: firebase.firestore.Timestamp.now()
@@ -64,19 +64,22 @@ class PostForm extends Component {
     
       render() {
           return (
-            <div style={{display: "flex"}}>
-                <img src={profile}  style={{width: "49px"}}></img>
+            <div style={{display: "flex", padding: "10px"}}>
+                <img src={profile}  style={{width: "49px", width: "150px"}}></img>
                 <div style={{display: "flex", flexDirection: "column", width: "100%"}}>
                     <TextField
                         id="filled-multiline-flexible"
                         label="Post your reply"
                         multiline
-                        maxRows={4}
+                        maxRows={8}
                         onChange={this.handleChange}
                         value={this.state.text}
                         variant="filled"
                         />
-                    <Button onClick={this.sendPost}>Post</Button>
+                    <div style={{display: "flex"}}>
+                        <div style={{flexGrow: 1}}></div>
+                        <Button onClick={this.sendPost} style={{margin: "10px"}}>Post</Button>
+                    </div>                
                 </div>
             </div>
           );
@@ -98,16 +101,15 @@ class Thread extends Component {
         id : "" // document id cooresponding to thread
     };
 
-        this.uid = ""; // url id, also the thread #
+        this.uid = ""; // url after /thread/
     }
   
     componentDidMount() {
         // uid is the thread index by creation order
-        this.uid = this.props.params["*"].split("/")[1];
+        this.uid = this.props.params["*"].split(".")[1];
 
         db.collection("uidToId").doc("threads").get().then ( (snapshot) => {
             this.setState(
-                // thread # uid to document id is stored in uidToId/threads
                 {id: snapshot.data()[this.uid]}
             );
 

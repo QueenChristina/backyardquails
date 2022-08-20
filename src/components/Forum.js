@@ -12,6 +12,8 @@ import '../styles/App.css';
 import db from '../firebase';
 import firebase from "firebase/app";
 
+import '../styles/App.css';
+
 class ThreadThumbnail extends Component {
     constructor() {
         super();
@@ -23,7 +25,7 @@ class ThreadThumbnail extends Component {
             <div style={{display: "flex"}} className="post">
                 <img src={profile} style={{width: "49px", margin: "auto"}}></img>
                 <div style={{width:"calc(100% - 100px)", display: "flex", flexDirection: "column"}}>
-                    <a href={"/threads/" + convertToLink(this.props.title) + "/" + this.props.uid}>
+                    <a href={"/threads/" + convertToLink(this.props.title) + "." + this.props.uid}>
                         <Typography variant="h6">{this.props.title}</Typography>
                     </a>
                     <Typography variant="body1" style={{overflowWrap: "break-word"}}> {this.props.username} | {date.toDateString().replace(/^\S+\s/,'')}</Typography>
@@ -59,17 +61,19 @@ class Forum extends Component {
     render() {
         return (
             <div>
-                <div>
+                <div style={{display: "flex", backgroundColor: "#816962"}}>
                     <Typography variant="h3" className="heading">
                         <a href="/forums" style={{paddingRight: "15px"}}>
                             <BackArrow style={{maxWidth:"12px", fill: "white"}} />
                         </a>
                         {this.props.category}
                     </Typography>
+                    <div style={{flexGrow: 1}}></div>
+                    <Button className="baseButton" onClick={() => {location.href="/forums/post-thread/" + convertToLink(this.props.category);}}>+ Post Thread</Button>
                 </div>
-                <Box className="outlinedWhiteBox columnPosts">
+                <Box className="outlinedWhiteBox columnPosts" style={{rowGap: "0px"}}>
                     {console.log(this.state.threads)}
-                    {this.state.threads.map((thread, index) =>
+                    {this.state.threads.reverse().map((thread, index) =>
                         <ThreadThumbnail key={index} id={thread.id} uid={thread.uid} username={thread.username} title={thread.title} date={thread.date} likes={thread.likes}/>                      
                     )}
                 </Box>
