@@ -11,6 +11,7 @@ import Forum from "./components/Forum.js";
 import TextEditor from "./components/TextEditor.js";
 import NewArticle from "./components/NewArticle.js";
 import Article from "./components/Article.js";
+import Login from "./components/Login.js";
 
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -21,15 +22,41 @@ import db from './firebase';
 
 
 class App extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      openLogin : false,
+      navBarKey: 0
+    }
+  }
+
+  handleClickOpen = () => {
+    this.setState({
+      openLogin: true,
+    });
+  }
+
+  refreshNavBar = () => {
+    this.setState({
+      navBarKey: this.state.navBarKey += 1
+    });
+  }
+
+  handleClose = () => {
+      this.setState({
+        openLogin: false,
+        navBarKey: this.state.navBarKey += 1
+      });
+      console.log("Closed and refreshed navbar");
   }
 
   render() {
     return (
       <div className="pageContainer">
-        <NavBar/>
+        <NavBar handleOpenLogin={this.handleClickOpen} key={this.state.navBarKey} refresh={this.refreshNavBar}/>
         <div className="contentContainer">
+          <Login open={this.state.openLogin} handleClose={this.handleClose} isSignUp={true}/>
           <Grid container spacing={2}>
             <Grid item xs={12} md={8}>
               <Routes>
