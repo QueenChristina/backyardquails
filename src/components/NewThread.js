@@ -15,6 +15,7 @@ import {FORUMCATEGORIES, LINKTOCATEGORY, convertToLink} from '../utils.js';
 import '../styles/App.css';
 import db from '../firebase';
 import firebase from "firebase/app";
+import { auth } from "../firebase";
 
 function withParams(Component) {
     return props => <Component {...props} params={useParams()} />;
@@ -29,7 +30,7 @@ class Thread extends Component {
         text: "", 
         category: "",
         username: "",
-        missingTitleError: false
+        errorMessage: ""
     };
 
         this.uid = ""; // url after /forums/
@@ -50,13 +51,20 @@ class Thread extends Component {
     }
 
     sendPost = () => {
+        if (!auth.currentUser) {
+            this.setState({
+                errorMessage: "Log in to post."
+            })
+            return;
+        }
         if (this.state.title != "" && this.state.category != "") {
             let newThreadIndex = 0;
             db.collection('values').doc('global').get().then( (snapshot) => {
                 newThreadIndex = snapshot.data().lastThreadIndex + 1;
 
                 db.collection('threads').add({
-                    username: "TempUser",
+                    username: auth.currentUser.displayName,
+                    userid: auth.currentUser.uid,
                     category: this.state.category,
                     title: this.state.title,
                     likes: 0,
@@ -72,7 +80,8 @@ class Thread extends Component {
                         location.href = "/threads/" + convertToLink(this.state.title) + "." + newThreadIndex;
                     } else {
                         db.collection('threads/' + newDocRef.id + '/Posts').add({
-                            username: "TempUser",
+                            username: auth.currentUser.displayName,
+                            userid: auth.currentUser.uid,
                             text: this.state.text,
                             rawContent: this.content,
                             likes: 0,
@@ -90,7 +99,9 @@ class Thread extends Component {
             });
 
         } else {
-            this.setState({missingTitleError: true});
+            this.setState({
+                errorMessage: "* Thread title and category is required to post."
+            });
         }
     }
 
@@ -139,8 +150,8 @@ class Thread extends Component {
                         inputProps={{ maxLength: 120 }}
                     />
 
-                    {this.state.missingTitleError &&
-                        <Typography variant="h6" style={{color: "red"}}>* Thread title and category is required to post. </Typography>
+                    {(this.state.errorMessage != "") &&
+                        <Typography variant="h6" style={{color: "red"}}>{this.state.errorMessage} </Typography>
                     }
 
                     <TextField

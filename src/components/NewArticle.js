@@ -15,6 +15,7 @@ import {ARTICLECATEGORIES, LINKTOCATEGORY, convertToLink} from '../utils.js';
 import '../styles/App.css';
 import db from '../firebase';
 import firebase from "firebase/app";
+import { auth } from "../firebase";
 
 function withParams(Component) {
     return props => <Component {...props} params={useParams()} />;
@@ -29,7 +30,7 @@ class NewArticle extends Component {
         description: "",
         category: "",
         username: "",
-        missingContentError: false
+        errorMessage: ""
     };
 
         this.uid = ""; // url after /articles/post/
@@ -38,7 +39,6 @@ class NewArticle extends Component {
     }
   
     componentDidMount() {
-        console.log(this.props.params["*"]);
         if (this.props.params["*"] != "" && this.props.params["*"] != undefined) {
             this.setState( {
                 category: LINKTOCATEGORY[this.props.params["*"]]
@@ -50,13 +50,20 @@ class NewArticle extends Component {
     }
 
     sendArticle = () => {
+        if (!auth.currentUser) {
+            this.setState({
+                errorMessage: "Log in to post."
+            })
+            return;
+        }
         if (this.state.title != "" && this.state.category != "" && this.contentText != "") {
             let newArtIndex = 0;
             db.collection('values').doc('global').get().then( (snapshot) => {
                 newArtIndex = snapshot.data().lastArticleIndex + 1;
 
                 db.collection('articles').add({
-                    username: "TempUser",
+                    username: auth.currentUser.displayName,
+                    userid: auth.currentUser.uid,
                     category: this.state.category,
                     title: this.state.title,
                     description: this.state.description,
@@ -71,7 +78,7 @@ class NewArticle extends Component {
     
                     db.collection('uidToId').doc('articles').set(newId, { merge: true });
     
-                    location.href = "/articles/" + convertToLink(this.state.title) + "." + newArtIndex;
+                    location.href = "/article/" + convertToLink(this.state.title) + "." + newArtIndex;
 
                 })
             
@@ -81,7 +88,9 @@ class NewArticle extends Component {
             });
 
         } else {
-            this.setState({missingContentError: true});
+            this.setState({
+                errorMessage: "* Title, content, and category is required to post."
+            });
         }
     }
 
@@ -129,8 +138,8 @@ class NewArticle extends Component {
                         inputProps={{ maxLength: 120 }}
                     />
 
-                    {this.state.missingContentError &&
-                        <Typography variant="h6" style={{color: "red"}}>* Title, content, and category is required to post. </Typography>
+                    {(this.state.errorMessage != "") &&
+                        <Typography variant="h6" style={{color: "red"}}>{this.state.errorMessage} </Typography>
                     }
 
                     <TextField

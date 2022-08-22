@@ -21,6 +21,7 @@ class Login extends Component {
             // open : false,
             isSignUp: this.props.isSignUp,
             email : "",
+            username : "",
             password: "",
             loading: false,
             errorMessage: ""
@@ -46,7 +47,7 @@ class Login extends Component {
             // await AuthProvider.signup("Bobby", this.state.email, this.state.password);
             await auth.createUserWithEmailAndPassword(this.state.email, this.state.password);
             auth.currentUser.updateProfile({
-                displayName: "Bobby"
+                displayName: this.state.username
             })
 
             if (!auth.currentUser) {console.log("Not authorized")} else {
@@ -93,6 +94,12 @@ class Login extends Component {
             password: event.target.value
         })
     }
+
+    handleChangeUsername = (event) => {
+        this.setState({
+            username: event.target.value
+        })
+    }
       
       handleChangeEmail = (event) => {
         this.setState({
@@ -100,9 +107,35 @@ class Login extends Component {
         })
     }
 
+    resetPassword = () => {
+        if (this.state.email != "") {
+            auth.sendPasswordResetEmail(this.state.email)
+            .then(() => {
+                this.setState({
+                    errorMessage: "Check your email for further instructions."
+                  })
+            })
+            .catch((error) => {
+              const errorMessage = error.message;
+              this.setState({
+                errorMessage: error.message
+              })
+            });
+        } else {
+            this.setState({
+                errorMessage: "Enter your email to reset password."
+              })
+        }
+      
+    }
+
     handleSubmit = (event) => {
         let success = false;
-        if (this.state.email != "" && this.state.password != "") {
+        if (this.state.isSignUp && this.state.username == "") {
+            this.setState({
+                errorMessage: "Username field cannot be empty."
+            })
+        } else if (this.state.email != "" && this.state.password != "") {
             if (this.state.isSignUp) {
                 this.setState({
                     loading: true
@@ -115,14 +148,12 @@ class Login extends Component {
             } else {
                 success = this.login();
             }
-    
-            console.log("Submitted");
             // if (success) {
             //     this.props.handleClose();
             // }
         } else {
             this.setState({
-                errorMessage: "Email and passwords field empty."
+                errorMessage: "Email and password field cannot be empty."
             })
         }
 
@@ -154,9 +185,16 @@ class Login extends Component {
                         fullWidth
                         variant="standard"
                     />
-                    {/* <DialogContentText>
-                        Password
-                    </DialogContentText> */}
+                    { this.state.isSignUp && <TextField
+                        autoFocus
+                        margin="dense"
+                        id="outlined-required"
+                        label="Username"
+                        onChange={this.handleChangeUsername}
+                        value={this.state.username}
+                        fullWidth
+                        variant="standard"
+                    />}
                     <TextField
                         autoFocus
                         margin="dense"
@@ -169,9 +207,15 @@ class Login extends Component {
                         variant="standard"
                         autoComplete="current-password"
                     />
+                        {!this.state.isSignUp && 
+                        <div>
+                        <Typography variant="body1" style={{display:"inline"}}>Forgot Password?</Typography>
+                        <Button onClick={this.resetPassword}> Reset here </Button>
+                        </div>}
+
                     </DialogContent>
                     <DialogActions>
-                        <Button disabled={this.state.loading} onClick={this.handleSubmit}> {this.state.isSignUp ? "Sign Up" : "Log In"} </Button>
+                        <Button disabled={this.state.loading} onClick={this.handleSubmit} className="baseButton"> {this.state.isSignUp ? "Sign Up" : "Log In"} </Button>
                     </DialogActions>
                     <DialogContent>
                         <Typography variant="body1" style={{display:"inline"}}>{this.state.isSignUp ? "Already have an account?" : "Don't have an account?"}</Typography>

@@ -16,6 +16,7 @@ import firebase from "firebase/app";
 
 import TextEditor from "./TextEditor";
 import draftToHtml from "draftjs-to-html";
+import PostReply from "./PostReply";
 
 class Comment extends Component {
     constructor() {
@@ -43,48 +44,48 @@ class Comment extends Component {
       }
 }
 
-class PostForm extends Component {
-    constructor(props) {
-        super(props);
+// class PostForm extends Component {
+//     constructor(props) {
+//         super(props);
 
-        this.state = {
-            editorKey: 0
-        };
-        this.content = {};
-      }
+//         this.state = {
+//             editorKey: 0
+//         };
+//         this.content = {};
+//       }
 
-    setContent = (value) => {
-        this.content = value;
-    }
+//     setContent = (value) => {
+//         this.content = value;
+//     }
 
-    sendPost = () => {
-        db.collection('articles/' + this.props.articleId + '/Comments').add({
-            username: "TempUser",
-            rawContent: this.content,
-            likes: 0,
-            date: firebase.firestore.Timestamp.now()
-        })
-        this.setState({
-            text: "",
-            editorKey: this.state.editorKey + 1
-        });
-    }
+//     sendPost = () => {
+//         db.collection('articles/' + this.props.articleId + '/Comments').add({
+//             username: "TempUser",
+//             rawContent: this.content,
+//             likes: 0,
+//             date: firebase.firestore.Timestamp.now()
+//         })
+//         this.setState({
+//             text: "",
+//             editorKey: this.state.editorKey + 1
+//         });
+//     }
     
-      render() {
-          return (
-            <div style={{display: "flex", padding: "10px"}}>
-                <img src={profile}  style={{width: "49px", width: "150px"}}></img>
-                <div style={{display: "flex", flexDirection: "column", width: "100%"}}>
-                        <TextEditor key={this.state.editorKey} onChange={this.setContent}/>
-                    <div style={{display: "flex"}}>
-                        <div style={{flexGrow: 1}}></div>
-                        <Button onClick={this.sendPost} style={{margin: "10px"}}>Post</Button>
-                    </div>                
-                </div>
-            </div>
-          );
-      }
-}
+//       render() {
+//           return (
+//             <div style={{display: "flex", padding: "10px"}}>
+//                 <img src={profile}  style={{width: "49px", width: "150px"}}></img>
+//                 <div style={{display: "flex", flexDirection: "column", width: "100%"}}>
+//                         <TextEditor key={this.state.editorKey} onChange={this.setContent}/>
+//                     <div style={{display: "flex"}}>
+//                         <div style={{flexGrow: 1}}></div>
+//                         <Button onClick={this.sendPost} style={{margin: "10px"}}>Post</Button>
+//                     </div>                
+//                 </div>
+//             </div>
+//           );
+//       }
+// }
 
 function withParams(Component) {
     return props => <Component {...props} params={useParams()} />;
@@ -166,7 +167,7 @@ class Article extends Component {
                     {this.state.comments.map((comment, index) =>
                         <Comment key={index} username={comment.username} rawContent={comment.rawContent} date={comment.date} likes={comment.likes}/>                      
                     )}
-                    <PostForm articleId={this.state.id}/>
+                    <PostReply isThread={false} id={this.state.id}/>
                 </Box>
             </div>
         );

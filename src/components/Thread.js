@@ -11,11 +11,12 @@ import { TextField } from "@material-ui/core";
 import {convertToLink, timestampToString} from '../utils.js';
 
 import '../styles/App.css';
-import db from '../firebase';
+import db, { auth } from '../firebase';
 import firebase from "firebase/app";
 
 import TextEditor from "./TextEditor";
 import draftToHtml from "draftjs-to-html";
+import PostReply from "./PostReply";
 
 class Post extends Component {
     constructor() {
@@ -38,57 +39,6 @@ class Post extends Component {
                         dangerouslySetInnerHTML={{
                         __html: draftToHtml(this.props.rawContent)}}/>
                     }
-                </div>
-            </div>
-          );
-      }
-}
-
-class PostForm extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            text: "",
-            editorKey: 0
-        };
-        this.content = {};
-      }
-
-    handleChange = (event) => {
-        this.setState({
-            text: event.target.value
-        });
-      }
-
-    setContent = (value) => {
-        this.content = value;
-    }
-
-    sendPost = () => {
-        db.collection('threads/' + this.props.threadId + '/Posts').add({
-            username: "TempUser",
-            text: this.state.text,
-            rawContent: this.content,
-            likes: 0,
-            date: firebase.firestore.Timestamp.now()
-        })
-        this.setState({
-            text: "",
-            editorKey: this.state.editorKey + 1
-        });
-    }
-    
-      render() {
-          return (
-            <div style={{display: "flex", padding: "10px"}}>
-                <img src={profile}  style={{width: "49px", width: "150px"}}></img>
-                <div style={{display: "flex", flexDirection: "column", width: "100%"}}>
-                        <TextEditor key={this.state.editorKey} onChange={this.setContent}/>
-                    <div style={{display: "flex"}}>
-                        <div style={{flexGrow: 1}}></div>
-                        <Button onClick={this.sendPost} style={{margin: "10px"}}>Post</Button>
-                    </div>                
                 </div>
             </div>
           );
@@ -158,7 +108,7 @@ class Thread extends Component {
                     {this.state.posts.map((post, index) =>
                         <Post key={index} username={post.username} rawContent={post.rawContent} text={post.text} date={post.date} likes={post.likes}/>                      
                     )}
-                    <PostForm threadId={this.state.id}/>
+                    <PostReply isThread={true} id={this.state.id}/>
                 </Box>
             </div>
         );

@@ -26,7 +26,6 @@ class NavBar extends Component {
         fbIsInitialized: false
       }
 
-      console.log(auth.currentUser);
     }
 
     componentDidMount() {
@@ -36,8 +35,6 @@ class NavBar extends Component {
                 isLoggedIn: Boolean(auth.currentUser)
             });
 
-            console.log("Fb is initialized");
-            console.log(auth.currentUser);
         })
     }
 
@@ -94,7 +91,7 @@ class NavBar extends Component {
             {(auth.currentUser) ? 
                 (
                 <div>
-                    <Button onClick={this.openAccountMenu}>
+                    <Button onClick={this.openAccountMenu} style={{color: "white"}}>
                         <ProfileIcon className="icon"/>
                         {auth.currentUser.displayName}
                     </Button>
@@ -114,11 +111,13 @@ class NavBar extends Component {
                 </div>
                 )
                 : 
-                <Button onClick={() => {
+                <Button 
+                style={{color: "white"}}
+                onClick={() => {
                     this.props.handleOpenLogin();
                     }}>
                     <ProfileIcon className="icon"/>
-                    Log In
+                    Sign Up
                 </Button>
             }
             </div>
