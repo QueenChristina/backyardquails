@@ -30,7 +30,8 @@ class NewArticle extends Component {
         description: "",
         category: "",
         username: "",
-        errorMessage: ""
+        errorMessage: "",
+        imgUrl: ""
     };
 
         this.uid = ""; // url after /articles/post/
@@ -56,6 +57,12 @@ class NewArticle extends Component {
             })
             return;
         }
+        if (this.state.imgUrl == "") {
+            this.setState({
+                errorMessage: "* Image url is required. Please upload to imgur if needed."
+            });
+            return;
+        }
         if (this.state.title != "" && this.state.category != "" && this.contentText != "") {
             let newArtIndex = 0;
             db.collection('values').doc('global').get().then( (snapshot) => {
@@ -66,10 +73,10 @@ class NewArticle extends Component {
                     userid: auth.currentUser.uid,
                     category: this.state.category,
                     title: this.state.title,
-                    description: this.state.description,
+                    description: (this.state.description == "") ? this.contentText.substring(0, 160): this.state.description,
                     rawContent: this.content,
                     likes: 0,
-                    thumbnail: "https://www.backyardchickens.com/images/fc/hp-01/2022-08-13_08-30-38.jpg",
+                    thumbnail: this.state.imgUrl,
                     date: firebase.firestore.Timestamp.now(),
                     uid: newArtIndex,
                 }).then((newDocRef) => {
@@ -109,6 +116,12 @@ class NewArticle extends Component {
     handleChangeCategory = (event) => {
         this.setState({
             category: event.target.value
+        });
+    }
+
+    handleChangeImg = (event) => {
+        this.setState({
+            imgUrl: event.target.value
         });
     }
 
@@ -163,14 +176,24 @@ class NewArticle extends Component {
                         id="filled-multiline-flexible"
                         label="Description (Optional)"
                         multiline
-                        rows={4}
+                        rows={2}
                         onChange={this.handleChangeDescription}
                         value={this.state.description}
                         variant="filled"
+                        maxLength={160}
                         />
 
                     <TextEditor onChange={this.setContent}/>
                     
+                    <TextField
+                        id="filled-multiline-flexible"
+                        label="Thumbnail Image URL"
+                        multiline
+                        rows={2}
+                        onChange={this.handleChangeImg}
+                        value={this.state.imgUrl}
+                        variant="filled"
+                        />
         
                     <div style={{display: "flex"}}>
                         <div style={{flexGrow: 1}}></div>

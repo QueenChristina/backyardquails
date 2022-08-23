@@ -4,7 +4,7 @@ export const FORUMCATEGORIES = ["Incubating and Hatching Eggs",
                                 "Feeding and Watering",
                                 "Emergencies, Diseases, and Injuries",
                                 "Predators and Pests",
-                                "Behaviors and Eggs",
+                                "Behaviors and EggLaying",
                                 "Meat Bird",
                                 "Laws",
                                 "Pictures and Stories"];
@@ -19,6 +19,17 @@ export const ARTICLECATEGORIES = [  "Getting Started",
                                     "Meat Bird and Processing",
                                     "Other"
                                 ]
+export const FORUMTOPIC = 
+        {"Incubating and Hatching Eggs" : "../assets/hatch.png",
+        "Raising Babies" : "../assets/chick.png",
+        "Aviary and Hutches" : "../assets/hutch.png",
+        "Feeding and Watering" : "../assets/feedwater.png",
+        "Emergencies, Diseases, and Injuries" : "../assets/health.png",
+        "Predators and Pests" : "../assets/predator.png",
+        "Behaviors and EggLaying" : "../assets/egglaying.png",
+        "Meat Bird" : "../assets/meat.png",
+        "Laws" : "../assets/law.png",
+        "Pictures and Stories" : "../assets/pic.png"};
 
 export let LINKTOCATEGORY = {}
 export let LINKTOARTICLECATEGORY = {}

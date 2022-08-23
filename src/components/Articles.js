@@ -74,6 +74,16 @@ class Articles extends Component {
         this.setState({
             category: event.target.value
         });
+
+        db.collection("articles").where("category", "==", this.state.category).orderBy("date", "asc").get().then(snapshot => 
+            this.setState({
+                articles: snapshot.docs.slice(0, 18).map(x => {
+                    const data = x.data();
+                    const id = x.id;
+                    return { id, ...data };
+                })
+            })
+        );
     }
   
     render() {

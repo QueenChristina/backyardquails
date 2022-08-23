@@ -1,4 +1,5 @@
 node_modules/
+art/
 
 src/firebase.js
 .env.local

@@ -11,6 +11,29 @@ import {convertToLink, timestampToString, FORUMCATEGORIES} from '../utils.js';
 import '../styles/App.css';
 import db from '../firebase';
 
+import incubating from '../assets/hatch.png';
+import raising from '../assets/chick.png';
+import aviary from "../assets/hutch.png";
+import feeding from "../assets/feedwater.png";
+import disease from "../assets/health.png";
+import pred from "../assets/predator.png";
+import beh from "../assets/egglaying.png";
+import meat from "../assets/meat.png";
+import laws from "../assets/law.png";
+import pics from "../assets/pic.png";
+
+const FORUMTOPIC = 
+        {"Incubating and Hatching Eggs" : incubating,
+        "Raising Babies" : raising,
+        "Aviary and Hutches" : aviary,
+        "Feeding and Watering" : feeding,
+        "Emergencies, Diseases, and Injuries" : disease,
+        "Predators and Pests" : pred,
+        "Behaviors and EggLaying" : beh,
+        "Meat Bird" : meat,
+        "Laws" : laws,
+        "Pictures and Stories" : pics};
+
 class ForumThumbnail extends Component {
     constructor(props) {
         super(props);
@@ -70,7 +93,7 @@ class Forums extends Component {
                 </div>
                 <Box className="outlinedWhiteBox">
                     {FORUMCATEGORIES.map((category) => 
-                        <ForumThumbnail key={category} category={category} icon={bird}/>
+                        <ForumThumbnail key={category} category={category} icon={FORUMTOPIC[category]}/>
                     )}
                 </Box>
             </div>

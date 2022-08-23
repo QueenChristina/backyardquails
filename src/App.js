@@ -19,6 +19,7 @@ import Typography from '@material-ui/core/Typography';
 
 import './styles/App.css';
 import db from './firebase';
+import MyAccount from "./components/MyAccount.js";
 
 
 class App extends Component {
@@ -62,6 +63,7 @@ class App extends Component {
               <Routes>
                 <Route path="/" element={<FeaturedContent/>}/>
                 <Route path="/forums" element={<Forums/>}/>
+                <Route path="/account" element={<MyAccount/>}/>
                 <Route path="/articles" element={<Articles/>}/>
                 <Route path="/threads/*" element={<Thread/>}/>
                 <Route path="/forums/post-thread/*" element={<NewThread/>}/>
@@ -76,7 +78,7 @@ class App extends Component {
                 <Route path="/forums/feeding-and-watering" element={<Forum category="Feeding and Watering"/>}/>
                 <Route path="/forums/emergencies-diseases-and-injuries" element={<Forum category="Emergencies, Diseases, and Injuries"/>}/>
                 <Route path="/forums/predators-and-pests" element={<Forum category="Predators and Pests"/>}/>
-                <Route path="/forums/behaviors-and-eggs" element={<Forum category="Behaviors and Eggs"/>}/>
+                <Route path="/forums/behaviors-and-egglaying" element={<Forum category="Behaviors and EggLaying"/>}/>
                 <Route path="/forums/meat-bird" element={<Forum category="Meat Bird"/>}/>
                 <Route path="/forums/laws" element={<Forum category="Laws"/>}/>
                 <Route path="/forums/pictures-and-stories" element={<Forum category="Pictures and Stories"/>}/>

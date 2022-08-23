@@ -67,6 +67,7 @@ class NavBar extends Component {
     }
 
     goTo = (link) => {
+        this.closeAccountMenu();
         location.href=link;
     }
   
@@ -104,7 +105,7 @@ class NavBar extends Component {
                         'aria-labelledby': 'basic-button',
                         }}
                     >
-                        <MenuItem onClick={this.closeAccountMenu}>My account</MenuItem>
+                        <MenuItem onClick={()=>this.goTo("/account")}>My account</MenuItem>
                         <MenuItem onClick={this.logOut}>Logout</MenuItem>
                     </Menu>
                 
