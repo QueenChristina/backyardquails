@@ -42,7 +42,12 @@ class MyAccount extends Component {
                 email: auth.currentUser.email,
                 img: auth.currentUser.photoURL,
             });
-
+        db.collection('users').doc(auth.currentUser.uid).get().then((snapshot) => {
+            this.setState({
+                description: snapshot.data().description,
+                // img: snapshot.data().photoURL
+            }); 
+        });
         })
     }
 
@@ -66,7 +71,7 @@ class MyAccount extends Component {
 
     handleChangePhoto = (event) => {
         this.setState({
-            photo: event.target.value
+            img: event.target.value
         });
     }
 
@@ -84,8 +89,9 @@ class MyAccount extends Component {
             email: this.state.email,
         });
         // TODO: Fix this. add user profile
-        db.doc('users/' + auth.currentUser.uid).update({
-            description: this.state.description
+        db.collection('users').doc(auth.currentUser.uid).set({
+            description: this.state.description,
+            photoURL: this.state.img
         });
     }
 
@@ -125,7 +131,7 @@ class MyAccount extends Component {
 
                     <div style={{display: "flex"}}>
                         <Typography variant="body1" style={{width: "150px"}}>Image</Typography>
-                        <img src={this.state.img}></img>
+                        <img src={this.state.img} style={{width: "200px"}}></img>
                         <TextField
                             id="filled-basic"
                             label="Image URL"

@@ -19,16 +19,41 @@ import draftToHtml from "draftjs-to-html";
 import PostReply from "./PostReply";
 
 class Comment extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            img: "",
+        }
       }
-    
+
+      componentDidMount() {
+
+        db.collection('users').doc(this.props.userid).get().then((snapshot) => {
+            if (snapshot.data()) {
+                this.setState({
+                    img: snapshot.data().photoURL
+                }); 
+            }
+        });
+
+        if (this.state.img == undefined) {
+            this.setState({
+                img: ""
+            }); 
+        }
+    }
+
       render() {
         
           return (
             <div style={{display: "flex"}} className="post">
                 <div style={{display:"flex", flexDirection: "column", width: "150px"}}>
-                    <img src={profile} style={{width: "49px", margin: "10px auto"}}></img>
+                    {(this.state.img == "") ? 
+                        <img src={profile} style={{width: "100px", height: "100px", margin: "10px auto"}}></img>
+                        :
+                        <img src={this.state.img} style={{width: "100px", height: "100px", margin: "10px auto"}}></img>
+                    }
                     <Typography variant="h6" style={{wordWrap:"break-word", textAlign:"center"}}> {this.props.username} </Typography>
                     <Typography variant="body1" style={{textAlign:"center"}}> {timestampToString(this.props.date)} </Typography>
                 </div>
@@ -165,7 +190,7 @@ class Article extends Component {
                 </div> 
                 <Box className="outlinedWhiteBox columnPosts">
                     {this.state.comments.map((comment, index) =>
-                        <Comment key={index} username={comment.username} rawContent={comment.rawContent} date={comment.date} likes={comment.likes}/>                      
+                        <Comment key={index} username={comment.username} userid={comment.userid} rawContent={comment.rawContent} date={comment.date} likes={comment.likes}/>                      
                     )}
                     <PostReply isThread={false} id={this.state.id}/>
                 </Box>

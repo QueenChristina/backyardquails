@@ -99,7 +99,11 @@ class PostReply extends Component {
       render() {
           return (
             <div style={{display: "flex", padding: "10px"}}>
+                {(auth.currentUser && auth.currentUser.photoURL) ? 
+                <img src={auth.currentUser.photoURL}  style={{width: "49px", width: "150px", height: "150px"}}></img> :
                 <img src={profile}  style={{width: "49px", width: "150px"}}></img>
+                }
+                
                 <div style={{display: "flex", flexDirection: "column", width: "100%"}}>
                         <TextEditor key={this.state.editorKey} onChange={this.setContent}/>
                     <div style={{display: "flex"}}>

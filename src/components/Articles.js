@@ -75,6 +75,7 @@ class Articles extends Component {
             category: event.target.value
         });
 
+        // TODO: FIX
         db.collection("articles").where("category", "==", this.state.category).orderBy("date", "asc").get().then(snapshot => 
             this.setState({
                 articles: snapshot.docs.slice(0, 18).map(x => {
